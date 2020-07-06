@@ -5,8 +5,7 @@ from odoo import _, api, fields, models
 
 
 class Agreement(models.Model):
-    _name = "agreement"
-    _inherit = ["agreement", "mail.thread"]
+    _inherit = "agreement"
 
     # General
     name = fields.Char(string="Title", required=True)
@@ -129,6 +128,8 @@ class Agreement(models.Model):
     use_parties_content = fields.Boolean(
         string="Use parties content",
         help="Use custom content for parties")
+    company_partner_id = fields.Many2one(
+        related="company_id.partner_id", string="Company's Partner")
 
     def _get_default_parties(self):
         deftext = """
@@ -344,7 +345,7 @@ class Agreement(models.Model):
             "stage_id": self.env.ref("agreement_legal.agreement_stage_new").id,
         }
         res = self.copy(default=default_vals)
-        res.sections_ids.clauses_ids.write({'agreement_id': res.id})
+        res.sections_ids.mapped('clauses_ids').write({'agreement_id': res.id})
         return {
             "res_model": "agreement",
             "type": "ir.actions.act_window",

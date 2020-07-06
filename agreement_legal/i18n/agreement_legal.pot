@@ -329,6 +329,11 @@ msgid "Company Information"
 msgstr ""
 
 #. module: agreement_legal
+#: model:ir.model.fields,field_description:agreement_legal.field_agreement__company_partner_id
+msgid "Company's Partner"
+msgstr ""
+
+#. module: agreement_legal
 #: model:ir.model.fields,help:agreement_legal.field_agreement__dynamic_description
 msgid "Compute dynamic description"
 msgstr ""
@@ -531,6 +536,14 @@ msgstr ""
 #: code:addons/agreement_legal/static/src/xml/domain_widget_view.xml:21
 #, python-format
 msgid "Domain"
+msgstr ""
+
+#. module: agreement_legal
+#. openerp-web
+#: code:addons/agreement_legal/static/src/xml/domain_widget_view.xml:79
+#: code:addons/agreement_legal/static/src/xml/domain_widget_view.xml:83
+#, python-format
+msgid "Domain node"
 msgstr ""
 
 #. module: agreement_legal
@@ -770,11 +783,6 @@ msgid "Link your Field Service orders and equipments to an agreement"
 msgstr ""
 
 #. module: agreement_legal
-#: model:ir.model.fields,field_description:agreement_legal.field_res_config_settings__module_fieldservice_agreement
-msgid "Link your Field Service orders and equipments to an agreement."
-msgstr ""
-
-#. module: agreement_legal
 #: model_terms:ir.ui.view,arch_db:agreement_legal.res_config_settings_view_form
 msgid "Link your Helpdesk tickets to an agreement"
 msgstr ""
@@ -850,6 +858,11 @@ msgid "Maintenance"
 msgstr ""
 
 #. module: agreement_legal
+#: model:ir.model.fields,field_description:agreement_legal.field_res_config_settings__module_fieldservice_agreement
+msgid "Manage Agreements"
+msgstr ""
+
+#. module: agreement_legal
 #: model_terms:ir.ui.view,arch_db:agreement_legal.res_config_settings_view_form
 msgid "Manage maintenance agreements and contracts"
 msgstr ""
@@ -910,9 +923,9 @@ msgid "Name:"
 msgstr ""
 
 #. module: agreement_legal
-#: code:addons/agreement_legal/models/agreement.py:79
-#: code:addons/agreement_legal/models/agreement.py:358
-#: code:addons/agreement_legal/models/agreement.py:361
+#: code:addons/agreement_legal/models/agreement.py:78
+#: code:addons/agreement_legal/models/agreement.py:359
+#: code:addons/agreement_legal/models/agreement.py:362
 #, python-format
 msgid "New"
 msgstr ""

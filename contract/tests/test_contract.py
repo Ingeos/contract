@@ -169,6 +169,11 @@ class TestContract(TestContractBase):
         self.assertAlmostEqual(self.inv_line.price_subtotal, 50.0)
         self.assertEqual(self.contract.user_id, self.invoice_monthly.user_id)
 
+    def test_contract_action_preview(self):
+        action = self.contract.action_preview()
+        self.assertIn("/my/contracts/", action["url"])
+        self.assertIn("access_token=", action["url"])
+
     def test_contract_recurring_next_date(self):
         recurring_next_date = to_date('2018-01-15')
         self.assertEqual(
@@ -200,6 +205,21 @@ class TestContract(TestContractBase):
             self.acct_line.recurring_next_date, recurring_next_date
         )
         self.assertEqual(self.acct_line.last_date_invoiced, last_date_invoiced)
+
+    def test_contract_invoice_followers(self):
+        self.acct_line.recurring_next_date = '2018-02-23'
+        self.acct_line.recurring_rule_type = 'daily'
+        self.contract.pricelist_id = False
+        self.contract.message_subscribe(
+            partner_ids=self.contract.partner_id.ids,
+            subtype_ids=self.env.ref(
+                'contract.mail_message_subtype_invoice_created'
+            ).ids
+        )
+        self.contract.recurring_create_invoice()
+        invoice_daily = self.contract._get_related_invoices()
+        self.assertTrue(invoice_daily)
+        self.assertEqual(len(invoice_daily.message_partner_ids.ids), 2)
 
     def test_contract_weekly_post_paid(self):
         recurring_next_date = to_date('2018-03-01')

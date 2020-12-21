@@ -19,6 +19,7 @@ class ContractContract(models.Model):
         'mail.thread',
         'mail.activity.mixin',
         'contract.abstract.contract',
+        'portal.mixin'
     ]
 
     active = fields.Boolean(
@@ -418,6 +419,18 @@ class ContractContract(models.Model):
         invoices.compute_taxes()
 
     @api.model
+    def _invoice_followers(self, invoices):
+        invoice_create_subtype = self.sudo().env.ref(
+            'contract.mail_message_subtype_invoice_created'
+        )
+        for item in self:
+            partner_ids = item.message_follower_ids.filtered(
+                lambda x: invoice_create_subtype in x.subtype_ids
+            ).mapped('partner_id')
+            if partner_ids:
+                invoices.message_subscribe(partner_ids=partner_ids.ids)
+
+    @api.model
     def _finalize_and_create_invoices(self, invoices_values):
         """This method:
 
@@ -435,6 +448,7 @@ class ContractContract(models.Model):
             )
         invoices = self.env['account.invoice'].create(final_invoices_values)
         self._finalize_invoice_creation(invoices)
+        self._invoice_followers(invoices)
         return invoices
 
     @api.model
@@ -601,3 +615,16 @@ class ContractContract(models.Model):
             'terminate_comment': False,
             'terminate_date': False,
         })
+
+    def _compute_access_url(self):
+        for record in self:
+            record.access_url = '/my/contracts/{}'.format(record.id)
+
+    def action_preview(self):
+        """Invoked when 'Preview' button in contract form view is clicked."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': self.get_portal_url(),
+        }
